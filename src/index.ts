@@ -49,7 +49,7 @@ const main = async () => {
         getCurrent: () => current
     })
 
-    for (let i = savePoint + 1; i <= latestId; i++)
+    for (let i = savePoint + 1; i <= latestId; i++) {
         queue.add(async () => {
             const hentai = await getHifumin(browser, i)
             if (hentai instanceof Error) return console.log(`Skip: ${i}`)
@@ -61,10 +61,14 @@ const main = async () => {
                 new Promise((resolve) => setTimeout(resolve, 500))
             ])
         })
+    }
 
     await queue.onIdle()
+    await browser.close()
 
     stopEstimation()
+
+    process.exit(0)
 }
 
 main()

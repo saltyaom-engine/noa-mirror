@@ -53,7 +53,7 @@ export const createProgress = ({
         )
 
         console.log(
-            `(${percent}%) | ${current}/${end} | Estimate time left: ${timeLeft}`
+            `(${percent}%) | ${current + start}/${end} | Estimate time left: ${timeLeft}`
         )
     }, 10000)
 
