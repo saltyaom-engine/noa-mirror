@@ -15,11 +15,10 @@
   },
   "dependencies": {
     "@types/node": "^18.13.0",
-    "isomorphic-unfetch": "^4.0.2",
-    "node-html-parser": "^5.2.0",
     "p-queue": "6",
     "puppeteer": "^19.6.3",
     "puppeteer-extra": "^3.3.4",
-    "puppeteer-extra-plugin-stealth": "^2.11.1"
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
+    "redaxios": "^0.5.1"
   }
 }

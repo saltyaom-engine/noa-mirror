@@ -27,21 +27,20 @@ export const getLatestID = async (
     })
 
     try {
-        const humanVerification = await page.waitForSelector(
-            '.big-button.pow-button',
-            {
-                timeout: 10000 + iteration * 5000
-            }
-        ).then((x) => x?.asElement())
+        const humanVerification = await page
+            .waitForSelector('.big-button.pow-button', {
+                timeout: 7500 + iteration * 2000
+            })
+            .then((x) => x?.asElement())
+            .catch(() => null)
 
-        if(humanVerification)
-            await humanVerification.click()
+        if (humanVerification) await humanVerification.click()
 
         const firstCover = await page
             .waitForSelector(
                 '#content > .index-container:nth-child(3) > .gallery > .cover',
                 {
-                    timeout: 10000 + iteration * 5000
+                    timeout: 3000 + iteration * 5000
                 }
             )
             .then((x) => x?.asElement())
