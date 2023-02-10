@@ -40,7 +40,7 @@ const main = async () => {
         process.exit(1)
     }
 
-    await Promise.all([writeFile(`data/latest.json`, JSON.stringify(latest))])
+    await writeFile(`data/latest.json`, JSON.stringify(latest))
 
     let current = 0
 
