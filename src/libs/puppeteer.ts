@@ -27,14 +27,25 @@ export const getLatestID = async (
     })
 
     try {
-        const firstCover = (
-            await page.waitForSelector(
+        const humanVerification = await page.waitForSelector(
+            '.big-button.pow-button',
+            {
+                timeout: 10000 + iteration * 5000
+            }
+        ).then((x) => x?.asElement())
+
+        if(humanVerification)
+            await humanVerification.click()
+
+        const firstCover = await page
+            .waitForSelector(
                 '#content > .index-container:nth-child(3) > .gallery > .cover',
                 {
-                    timeout: 10000
+                    timeout: 10000 + iteration * 5000
                 }
             )
-        )?.asElement()
+            .then((x) => x?.asElement())
+
         if (!firstCover) throw new Error("Couldn't find first cover")
 
         const url = await firstCover.getProperty('href')
@@ -51,6 +62,8 @@ export const getLatestID = async (
 
         return id ? parseInt(id) : new Error("Couldn't find id")
     } catch (err) {
+        await page.close()
+
         if (iteration < 5) {
             await new Promise((resolve) =>
                 setTimeout(resolve, 3000 * iteration)
