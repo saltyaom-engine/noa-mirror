@@ -30,7 +30,7 @@ jobs:
           WORKER_INDEX: ${{ matrix.ci_node_index }}
           NODE_ENV: production
         with:
-          args: pnpm start
+          args: npx ts-node src/index.ts
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
