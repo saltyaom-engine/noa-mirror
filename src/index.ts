@@ -18,18 +18,16 @@ const queue = new PQueue({ concurrency: 6 })
 const main = async () => {
     const browser = await createBrowser()
 
-    let latestId = await getLatestID(browser)
-
-    if (latestId instanceof Error) {
-        console.error(latestId.message)
-        process.exit(1)
-    }
-
     const savePoint = await getSavePoint(browser)
-
     if (savePoint instanceof Error) {
         console.warn(savePoint)
         throw new Error('Unable to get save point')
+    }
+
+    let latestId = await getLatestID(browser)
+    if (latestId instanceof Error) {
+        console.error(latestId.message)
+        process.exit(1)
     }
 
     if (latestId <= savePoint) return

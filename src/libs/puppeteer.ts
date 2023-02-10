@@ -79,8 +79,11 @@ export const getSavePoint = async (browser: Browser) => {
     const page = await browser.newPage()
     await page.setJavaScriptEnabled(false)
 
-    page.goto(
-        'https://raw.githubusercontent.com/saltyaom-engine/noa-mirror/generated/latest.json'
+    await page.goto(
+        'https://raw.githubusercontent.com/saltyaom-engine/noa-mirror/generated/latest.json',
+        {
+            waitUntil: 'networkidle2'
+        }
     )
 
     await page.waitForSelector('body > pre', {
