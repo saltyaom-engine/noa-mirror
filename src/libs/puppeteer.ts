@@ -88,6 +88,8 @@ export const getSavePoint = async (browser: Browser) => {
     })
 
     const raw = await page.$eval('body > pre', (el) => el.innerHTML)
+    await page.close()
+
     if (!raw.startsWith('{"id"')) return new Error('Not found')
 
     const data: Hifumin = JSON.parse(raw)
