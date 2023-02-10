@@ -16,6 +16,7 @@
   "dependencies": {
     "@octokit/rest": "^19.0.7",
     "@types/node": "^18.13.0",
+    "isomorphic-unfetch": "^4.0.2",
     "p-queue": "6",
     "puppeteer": "^19.6.3",
     "puppeteer-extra": "^3.3.4",

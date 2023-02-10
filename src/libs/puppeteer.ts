@@ -75,31 +75,6 @@ export const getLatestID = async (
     }
 }
 
-export const getSavePoint = async (browser: Browser) => {
-    const page = await browser.newPage()
-    await page.setJavaScriptEnabled(false)
-
-    await page.goto(
-        'https://raw.githubusercontent.com/saltyaom-engine/noa-mirror/generated/latest.json',
-        {
-            waitUntil: 'networkidle2'
-        }
-    )
-
-    await page.waitForSelector('body > pre', {
-        timeout: 7500
-    })
-
-    const raw = await page.$eval('body > pre', (el) => el.innerHTML)
-    await page.close()
-
-    if (!raw.startsWith('{"id"')) return new Error('Not found')
-
-    const data: Hifumin = JSON.parse(raw)
-
-    return data.id
-}
-
 export const getHifumin = async (
     browser: Browser,
     id: number,
