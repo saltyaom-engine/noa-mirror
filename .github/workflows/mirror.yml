@@ -23,6 +23,16 @@ jobs:
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
 
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.5.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: load checkpoint
+        run: npx degit github.com/saltyaom-engine/noa-mirror#generated data
+
       - name: Mirror
         uses: mujo-code/puppeteer-headful@v2
         env:
@@ -39,7 +49,7 @@ jobs:
           BRANCH: generated
           FOLDER: data
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "mirror"
+          MESSAGE: mirror
 
       - name: Zip artifact
         run: zip -r data.zip data
