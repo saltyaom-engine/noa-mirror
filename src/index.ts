@@ -25,7 +25,9 @@ const main = async () => {
         process.exit(1)
     }
 
-    const savePoint = await getSavePoint()
+    const savePoint = await getSavePoint(browser)
+
+    if (savePoint instanceof Error) throw new Error('Unable to get save point')
 
     if (latestId <= savePoint) return
     if (!existsSync('data')) await mkdir('data')
