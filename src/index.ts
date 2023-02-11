@@ -67,7 +67,6 @@ const main = async () => {
     await browser.close()
 
     stopEstimation()
-
     process.exit(0)
 }
 
