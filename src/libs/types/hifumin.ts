@@ -37,18 +37,13 @@ export interface HifuminInfo {
 }
 
 export interface HifuminMetadata {
-    parodies: HifuminTag[]
-    characters: HifuminTag[]
-    groups: HifuminTag[]
-    categories: HifuminTag[]
-    artists: HifuminTag[]
-    tags: HifuminTag[]
+    parodies: string[]
+    characters: string[]
+    groups: string[]
+    categories: string[]
+    artists: string[]
+    tags: string[]
     language: string
-}
-
-export interface HifuminTag {
-    name: string
-    count: number
 }
 
 export interface HifuminCommentResponse {

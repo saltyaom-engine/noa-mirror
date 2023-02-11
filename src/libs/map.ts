@@ -18,9 +18,9 @@ export const toHifumin = (h: NHentai): Hifumin => {
     return {
         id: h.id,
         title: {
-            english: h.title.english ?? "",
-            japanese: h.title.japanese ?? "",
-            display: h.title.pretty ?? ""
+            english: h.title.english ?? '',
+            japanese: h.title.japanese ?? '',
+            display: h.title.pretty ?? ''
         },
         images: {
             cover: mapNHCoverToHifumin({
@@ -63,45 +63,27 @@ export const createMetadata = (tags: NHentaiTag[]) => {
 
         switch (tag.type) {
             case 'tag':
-                metadata.tags.push({
-                    name,
-                    count
-                })
+                metadata.tags.push(name)
                 break
 
             case 'parody':
-                metadata.parodies.push({
-                    name,
-                    count
-                })
+                metadata.parodies.push(name)
                 break
 
             case 'character':
-                metadata.characters.push({
-                    name,
-                    count
-                })
+                metadata.characters.push(name)
                 break
 
             case 'group':
-                metadata.groups.push({
-                    name,
-                    count
-                })
+                metadata.groups.push(name)
                 break
 
             case 'category':
-                metadata.categories.push({
-                    name,
-                    count
-                })
+                metadata.categories.push(name)
                 break
 
             case 'artist':
-                metadata.artists.push({
-                    name,
-                    count
-                })
+                metadata.artists.push(name)
                 break
 
             case 'language':
@@ -109,10 +91,7 @@ export const createMetadata = (tags: NHentaiTag[]) => {
                 break
 
             default:
-                metadata.tags.push({
-                    name,
-                    count
-                })
+                metadata.tags.push(name)
         }
     }
 
