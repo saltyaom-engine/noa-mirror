@@ -13,22 +13,15 @@ import {
     SearchIndex
 } from './libs'
 
-const queue = new PQueue({ concurrency: 6 })
+const queue = new PQueue({ concurrency: 1 })
 
 const main = async () => {
-    const browser = await createBrowser()
-    const savePoint = await getSavePoint()
+    const [browser, savePoint] = await Promise.all([
+        createBrowser(),
+        getSavePoint()
+    ])
 
-    let latestId = await getLatestID(browser)
-
-    console.log({
-        latestId
-    })
-
-    if (latestId instanceof Error) {
-        console.error(latestId.message)
-        process.exit(1)
-    }
+    const latestId = await getLatestID(browser)
 
     if (latestId <= savePoint) return
     if (!existsSync('data')) await mkdir('data')
@@ -38,10 +31,6 @@ const main = async () => {
     )
 
     const latest = await getHifumin(browser, latestId)
-    if (latest instanceof Error) {
-        console.error("Can't get latest hentai")
-        process.exit(1)
-    }
 
     await writeFile(`data/latest.json`, JSON.stringify(latest))
 
@@ -67,10 +56,10 @@ const main = async () => {
         })
     }
 
-    await queue.onIdle()
-    await browser.close()
+    await Promise.all([queue.onIdle(), browser.close()])
 
     stopEstimation()
+
     process.exit(0)
 }
 
