@@ -7,6 +7,9 @@ import { toHifumin } from './map'
 
 import type { Hifumin, NHentai } from './types'
 
+const sleep = (second: number) =>
+    new Promise((resolve) => setTimeout(resolve, second * 1000))
+
 export const createBrowser = async () => {
     puppeteer.use(Stealth())
 
@@ -34,9 +37,6 @@ const newPage = async (browser: Browser) => {
         isLandscape: false,
         isMobile: false
     })
-
-    await page.setJavaScriptEnabled(true)
-    await page.setDefaultNavigationTimeout(0)
 
     await page.setExtraHTTPHeaders({
         'Accept-Language': 'en'
@@ -112,13 +112,7 @@ export const getHifumin = async (
     const page = await newPage(browser)
 
     try {
-        console.log('Navigate')
         await page.goto(`https://nhentai.net/api/gallery/${id}`, {
-            waitUntil: 'networkidle2'
-        })
-
-        await page.waitForNavigation({
-            timeout: 500,
             waitUntil: 'networkidle2'
         })
 
@@ -126,8 +120,7 @@ export const getHifumin = async (
             timeout: iteration === 0 ? 2500 : 7500
         })
 
-        console.log('Eval')
-        const hentai = await page.$eval('body > pre', (el) => el.innerHTML)
+        const hentai = await page.$eval('body > pre', (el) => '' + el.innerText)
 
         if (!hentai.startsWith('{"id"')) return new Error('Not found')
 
@@ -143,8 +136,7 @@ export const getHifumin = async (
             return getHifumin(browser, id, iteration + 1)
         }
 
-        console.error("Can't get latest hentai")
-        process.exit(1)
+        return new Error("Couldn't fetch hentai")
     } finally {
         await page.close()
     }

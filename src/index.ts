@@ -31,6 +31,10 @@ const main = async () => {
     )
 
     const latest = await getHifumin(browser, latestId)
+    if (latest instanceof Error) {
+        console.error("Can't get latest hentai")
+        process.exit(1)
+    }
 
     await writeFile(`data/latest.json`, JSON.stringify(latest))
 
