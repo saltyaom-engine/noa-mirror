@@ -22,7 +22,7 @@ export const getLatestID = async (
     iteration = 0
 ): Promise<number | Error> => {
     const page = await browser.newPage()
-    await page.goto('https://nhentai.net', {
+    await page.goto('https://nhentai.net/api/galleries/search?query="', {
         waitUntil: 'networkidle2'
     })
 
@@ -36,30 +36,17 @@ export const getLatestID = async (
 
         if (humanVerification) await humanVerification.click()
 
-        const firstCover = await page
-            .waitForSelector(
-                '#content > .index-container:nth-child(3) > .gallery > .cover',
-                {
-                    timeout: 3000 + iteration * 5000
-                }
-            )
-            .then((x) => x?.asElement())
+        const hentai = await page.$eval('body > pre', (el) => el.innerHTML)
+        if (!hentai.startsWith('{"result":[{"id":'))
+            return new Error('Not found')
 
-        if (!firstCover) throw new Error("Couldn't find first cover")
-
-        const url = await firstCover.getProperty('href')
-
-        const id = url
-            .toString()
-            .split('/')
-            .reverse()
-            .find((x) => x)
+        const id = +hentai.slice(18, hentai.indexOf('"', 20))
 
         await new Promise((resolve) => setTimeout(resolve, 3000))
 
         await page.close()
 
-        return id ? parseInt(id) : new Error("Couldn't find id")
+        return id
     } catch (err) {
         await page.close()
 

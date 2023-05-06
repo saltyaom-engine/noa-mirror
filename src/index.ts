@@ -17,10 +17,14 @@ const queue = new PQueue({ concurrency: 6 })
 
 const main = async () => {
     const browser = await createBrowser()
-
     const savePoint = await getSavePoint()
 
     let latestId = await getLatestID(browser)
+
+    console.log({
+        latestId
+    })
+
     if (latestId instanceof Error) {
         console.error(latestId.message)
         process.exit(1)
