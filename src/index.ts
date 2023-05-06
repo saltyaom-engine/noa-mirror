@@ -13,7 +13,7 @@ import {
     SearchIndex
 } from './libs'
 
-const queue = new PQueue({ concurrency: 1 })
+const queue = new PQueue({ concurrency: 6 })
 
 const main = async () => {
     const [browser, savePoint] = await Promise.all([
