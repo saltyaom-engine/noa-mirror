@@ -34,7 +34,7 @@ jobs:
         run: npx degit github.com/saltyaom-engine/noa-mirror#generated data
 
       - name: Mirror
-        uses: mujo-code/puppeteer-headful@v2
+        uses: mujo-code/puppeteer-headful@18.9.0
         env:
           WORKER_COUNT: ${{ matrix.ci_node_total }}
           WORKER_INDEX: ${{ matrix.ci_node_index }}
