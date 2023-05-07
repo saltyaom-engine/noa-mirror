@@ -7,6 +7,8 @@ import { toHifumin } from './map'
 
 import type { Hifumin, NHentai } from './types'
 
+export const usingTor = process.env.TOR == 'true'
+
 const sleep = (second: number) =>
     new Promise((resolve) => setTimeout(resolve, second * 1000))
 
@@ -16,7 +18,10 @@ export const createBrowser = async () => {
     return puppeteer.launch({
         channel: 'chrome',
         headless: false,
-        args: ['--no-sandbox'],
+        args: [
+            '--no-sandbox',
+            usingTor ? '--proxy-server=socks5://127.0.0.1:9050' : ''
+        ],
         executablePath: process.env.PUPPETEER_EXEC_PATH
     })
 }
@@ -25,6 +30,24 @@ const userAgent = getRandomUserAgent()
 const viewport = {
     width: 1600 + Math.floor(Math.random() * 320),
     height: 960 + Math.floor(Math.random() * 120)
+}
+
+export const detectTor = async (browser: Browser) => {
+    if (!usingTor) return
+
+    const page = await browser.newPage()
+
+    await page.goto('https://check.torproject.org/')
+
+    const torDetected = await page.$eval('body', (el) =>
+        el.innerHTML.includes(
+            'Congratulations. This browser is configured to use Tor'
+        )
+    )
+
+    if (torDetected) console.log('Using Tor')
+
+    page.close()
 }
 
 const newPage = async (browser: Browser) => {
@@ -62,7 +85,7 @@ export const getLatestID = async (
     try {
         const humanVerification = await page
             .waitForSelector('.big-button.pow-button', {
-                timeout: 15_000 + iteration * 2500
+                timeout: 30_000 + iteration * 2500
             })
             .then((x) => x?.asElement())
             .catch(() => null)
@@ -98,7 +121,7 @@ export const getLatestID = async (
 
         await page.close()
 
-        if (iteration < 3) {
+        if (iteration < 2) {
             await new Promise((resolve) =>
                 setTimeout(resolve, 3000 * iteration)
             )
@@ -108,7 +131,7 @@ export const getLatestID = async (
 
         console.error('Unable to bypass Cloudflare')
         console.error(errorPage)
-        console.log("Text Content:")
+        console.log('Text Content:')
         console.error(content)
         process.exit(1)
     }

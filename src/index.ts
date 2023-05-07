@@ -6,6 +6,7 @@ import PQueue from 'p-queue'
 import {
     createBrowser,
     createProgress,
+    detectTor,
     getHifumin,
     getLatestID,
     getSavePoint,
@@ -20,6 +21,8 @@ const main = async () => {
         createBrowser(),
         getSavePoint()
     ])
+
+    await detectTor(browser)
 
     const latestId = await getLatestID(browser)
 
