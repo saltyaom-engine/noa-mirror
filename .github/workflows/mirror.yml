@@ -44,10 +44,10 @@ jobs:
       - name: Mirror
         uses: mujo-code/puppeteer-headful@18.9.0
         env:
-          WORKER_COUNT: ${{ matrix.ci_node_total }}
-          WORKER_INDEX: ${{ matrix.ci_node_index }}
+          # WORKER_COUNT: ${{ matrix.ci_node_total }}
+          # WORKER_INDEX: ${{ matrix.ci_node_index }}
           NODE_ENV: production
-          TOR: 9051
+          TOR: true
         with:
           args: npx ts-node src/index.ts
 

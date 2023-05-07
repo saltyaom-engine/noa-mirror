@@ -9,7 +9,7 @@ import { toHifumin } from './map'
 
 import type { Hifumin, NHentai } from './types'
 
-export const usingTor = process.env.TOR
+export const usingTor = process.env.TOR == 'true'
 
 const sleep = (second: number) =>
     new Promise((resolve) => setTimeout(resolve, second * 1000))
@@ -22,7 +22,7 @@ export const createBrowser = async () => {
         headless: false,
         args: [
             '--no-sandbox',
-            usingTor ? `--proxy-server=socks5://0.0.0.0:${process.env.TOR}` : ''
+            usingTor ? `--proxy-server=socks5://localhost:9050` : ''
         ],
         executablePath: process.env.PUPPETEER_EXEC_PATH
     })
@@ -35,7 +35,7 @@ const viewport = {
 }
 
 export const detectTor = async (browser: Browser) => {
-    tor.setTorAddress('localhost', process.env.TOR)
+    tor.setTorAddress('localhost', 9050)
 
     if (!usingTor) return
 
