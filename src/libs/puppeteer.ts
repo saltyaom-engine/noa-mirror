@@ -37,16 +37,20 @@ export const detectTor = async (browser: Browser) => {
 
     const page = await browser.newPage()
 
-    await page.goto('https://check.torproject.org/')
+    try {
+        await page.goto('https://check.torproject.org/')
 
-    const torDetected = await page.$eval('body', (el) =>
-        el.innerHTML.includes(
-            'Congratulations. This browser is configured to use Tor'
+        const torDetected = await page.$eval('body', (el) =>
+            el.innerHTML.includes(
+                'Congratulations. This browser is configured to use Tor'
+            )
         )
-    )
 
-    if (torDetected) console.log('Using Tor')
-    else console.log('Failed to detect Tor. Proceed anyway...')
+        if (torDetected) console.log('Using Tor')
+        else console.log('Failed to detect Tor. Proceed anyway...')
+    } catch(error) {
+        console.log("Failed to check Tor status. Proceed anyway...")
+    }
 
     page.close()
 }
