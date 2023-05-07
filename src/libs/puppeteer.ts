@@ -2,6 +2,8 @@ import { Browser, Page } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
 import Stealth from 'puppeteer-extra-plugin-stealth'
 import { getRandom as getRandomUserAgent } from 'random-useragent'
+// @ts-ignore
+import tor from 'tor-request'
 
 import { toHifumin } from './map'
 
@@ -33,6 +35,8 @@ const viewport = {
 }
 
 export const detectTor = async (browser: Browser) => {
+    tor.setTorAddress('localhost', process.env.TOR)
+
     if (!usingTor) return
 
     const page = await browser.newPage()
@@ -48,8 +52,8 @@ export const detectTor = async (browser: Browser) => {
 
         if (torDetected) console.log('Using Tor')
         else console.log('Failed to detect Tor. Proceed anyway...')
-    } catch(error) {
-        console.log("Failed to check Tor status. Proceed anyway...")
+    } catch (error) {
+        console.log('Failed to check Tor status. Proceed anyway...')
     }
 
     page.close()
