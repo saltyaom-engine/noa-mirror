@@ -58,7 +58,7 @@ export const getLatestID = async (
     try {
         const humanVerification = await page
             .waitForSelector('.big-button.pow-button', {
-                timeout: 7500 + iteration * 2000
+                timeout: 20000 + iteration * 2500
             })
             .then((x) => x?.asElement())
             .catch(() => null)

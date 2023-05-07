@@ -60,7 +60,8 @@ const main = async () => {
         })
     }
 
-    await Promise.all([queue.onIdle(), browser.close()])
+    await queue.onIdle()
+    await browser.close()
 
     stopEstimation()
 
