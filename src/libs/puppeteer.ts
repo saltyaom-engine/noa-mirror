@@ -46,6 +46,7 @@ export const detectTor = async (browser: Browser) => {
     )
 
     if (torDetected) console.log('Using Tor')
+    else console.log('Failed to detect Tor. Proceed anyway...')
 
     page.close()
 }
