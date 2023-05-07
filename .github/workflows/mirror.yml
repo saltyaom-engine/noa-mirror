@@ -33,8 +33,6 @@ jobs:
       - uses: tor-actions/setup-tor@main
         with:
           tor-version: '0.4.5.7'
-          daemon: true
-          port: 9050
 
       - name: load checkpoint
         run: npx degit github.com/saltyaom-engine/noa-mirror#generated data
