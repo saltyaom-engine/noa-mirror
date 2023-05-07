@@ -20,7 +20,7 @@ export const createBrowser = async () => {
         headless: false,
         args: [
             '--no-sandbox',
-            usingTor ? `--proxy-server=socks5://127.0.0.1:${process.env.TOR}` : ''
+            usingTor ? `--proxy-server=socks5://0.0.0.0:${process.env.TOR}` : ''
         ],
         executablePath: process.env.PUPPETEER_EXEC_PATH
     })
