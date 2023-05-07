@@ -9,6 +9,8 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    container:
+      image: dperson/torproxy
     steps:
       - uses: actions/checkout@v2
 
@@ -29,14 +31,6 @@ jobs:
           run_install: |
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
-
-      - name: Install Tor
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tor
-
-      - name: Start Tor
-        run: sudo /etc/init.d/tor start
 
       - name: load checkpoint
         run: npx degit github.com/saltyaom-engine/noa-mirror#generated data
