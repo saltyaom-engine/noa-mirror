@@ -38,6 +38,10 @@ const newPage = async (browser: Browser) => {
         isMobile: false
     })
 
+    await page.setJavaScriptEnabled(true)
+    await page.setDefaultNavigationTimeout(0)
+    await page.setUserAgent(userAgent)
+
     await page.setExtraHTTPHeaders({
         'Accept-Language': 'en'
     })
