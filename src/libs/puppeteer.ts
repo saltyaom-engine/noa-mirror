@@ -58,7 +58,7 @@ export const getLatestID = async (
     try {
         const humanVerification = await page
             .waitForSelector('.big-button.pow-button', {
-                timeout: 20000 + iteration * 2500
+                timeout: 10_000 + iteration * 2500
             })
             .then((x) => x?.asElement())
             .catch(() => null)
@@ -89,6 +89,8 @@ export const getLatestID = async (
 
         return id
     } catch (err) {
+        const errorPage = await page.$eval('html', (el) => el.innerText)
+
         await page.close()
 
         if (iteration < 5) {
@@ -100,6 +102,7 @@ export const getLatestID = async (
         }
 
         console.error('Unable to bypass Cloudflare')
+        console.error(errorPage)
         process.exit(1)
     }
 }
