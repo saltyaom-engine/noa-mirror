@@ -62,7 +62,7 @@ export const getLatestID = async (
     try {
         const humanVerification = await page
             .waitForSelector('.big-button.pow-button', {
-                timeout: 10_000 + iteration * 2500
+                timeout: 20_000 + iteration * 2500
             })
             .then((x) => x?.asElement())
             .catch(() => null)
@@ -97,7 +97,7 @@ export const getLatestID = async (
 
         await page.close()
 
-        if (iteration < 5) {
+        if (iteration < 3) {
             await new Promise((resolve) =>
                 setTimeout(resolve, 3000 * iteration)
             )
