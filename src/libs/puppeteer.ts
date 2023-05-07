@@ -38,7 +38,7 @@ export const detectTor = async (browser: Browser) => {
     tor.setTorAddress('localhost', 9050)
 
     // Use a different Tor exit node
-    await tor.torNewSession()
+    await new Promise((resolve) => tor.newTorSession(resolve))
 
     if (!usingTor) return
 
@@ -91,14 +91,48 @@ export const getLatestID = async (
     })
 
     try {
-        const humanVerification = await page
-            .waitForSelector('.big-button.pow-button', {
-                timeout: 30_000 + iteration * 2500
-            })
-            .then((x) => x?.asElement())
-            .catch(() => null)
+        await Promise.allSettled([
+            new Promise<void>(async (resolve, reject) => {
+                const humanVerification = await page
+                    .waitForSelector('.big-button.pow-button', {
+                        timeout: 30_000 + iteration * 2500
+                    })
+                    .then((x) => x?.asElement())
+                    .catch(() => null)
 
-        if (humanVerification) await humanVerification.click()
+                if (humanVerification) {
+                    await humanVerification.click()
+
+                    console.log("Clear using .big-button.pow-button")
+
+                    resolve()
+                } else reject()
+            }),
+            new Promise<void>(async (resolve, reject) => {
+                const iframe = await page.waitForSelector('iframe', {
+                    timeout: 30_000 + iteration * 2500
+                })
+
+                const frame = await iframe?.contentFrame()
+
+                if (!frame) return reject()
+
+                const humanVerification = await frame
+                    .waitForSelector('.ctp-checkbox-label > label', {
+                        timeout: 30_000 + iteration * 2500
+                    })
+                    .then((x) => x?.asElement())
+                    .catch(() => null)
+
+                if (humanVerification) {
+                    await humanVerification.click()
+
+                    console.log("Clear using .ctp-checkbox-label > label")
+
+                    resolve()
+                } else reject()
+            })
+        ])
 
         const hentai = await page.$eval('body > pre', (el) => el.innerHTML)
         if (!hentai.startsWith('{"result":[{"id":')) {
