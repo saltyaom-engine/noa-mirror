@@ -89,7 +89,7 @@ export const getLatestID = async (
 
         return id
     } catch (err) {
-        const errorPage = await page.$eval('html', (el) => el.innerText)
+        const errorPage = await page.$eval('html', (el) => el.innerHTML)
 
         await page.close()
 
