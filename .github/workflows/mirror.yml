@@ -33,6 +33,8 @@ jobs:
       - uses: tor-actions/setup-tor@main
         with:
           tor-version: '0.4.5.7'
+          config: |
+              ControlPort 9051
 
       - name: load checkpoint
         run: npx degit github.com/saltyaom-engine/noa-mirror#generated data
@@ -43,7 +45,7 @@ jobs:
           WORKER_COUNT: ${{ matrix.ci_node_total }}
           WORKER_INDEX: ${{ matrix.ci_node_index }}
           NODE_ENV: production
-          TOR: true
+          TOR: 9051
         with:
           args: npx ts-node src/index.ts
 

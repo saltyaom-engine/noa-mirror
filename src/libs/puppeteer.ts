@@ -7,7 +7,7 @@ import { toHifumin } from './map'
 
 import type { Hifumin, NHentai } from './types'
 
-export const usingTor = process.env.TOR == 'true'
+export const usingTor = process.env.TOR
 
 const sleep = (second: number) =>
     new Promise((resolve) => setTimeout(resolve, second * 1000))
@@ -20,7 +20,7 @@ export const createBrowser = async () => {
         headless: false,
         args: [
             '--no-sandbox',
-            usingTor ? '--proxy-server=socks5://127.0.0.1:9050' : ''
+            usingTor ? `--proxy-server=socks5://127.0.0.1:${process.env.TOR}` : ''
         ],
         executablePath: process.env.PUPPETEER_EXEC_PATH
     })
