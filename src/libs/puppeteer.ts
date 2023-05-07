@@ -37,24 +37,23 @@ const viewport = {
 export const detectTor = async (browser: Browser) => {
     tor.setTorAddress('localhost', 9050)
 
+    // Use a different Tor exit node
+    await tor.torNewSession()
+
     if (!usingTor) return
 
     const page = await browser.newPage()
 
-    try {
-        await page.goto('https://check.torproject.org/')
+    await page.goto('https://check.torproject.org/')
 
-        const torDetected = await page.$eval('body', (el) =>
-            el.innerHTML.includes(
-                'Congratulations. This browser is configured to use Tor'
-            )
+    const torDetected = await page.$eval('body', (el) =>
+        el.innerHTML.includes(
+            'Congratulations. This browser is configured to use Tor'
         )
+    )
 
-        if (torDetected) console.log('Using Tor')
-        else console.log('Failed to detect Tor. Proceed anyway...')
-    } catch (error) {
-        console.log('Failed to check Tor status. Proceed anyway...')
-    }
+    if (torDetected) console.log('Using Tor')
+    else console.log('Failed to detect Tor. Proceed anyway...')
 
     page.close()
 }
